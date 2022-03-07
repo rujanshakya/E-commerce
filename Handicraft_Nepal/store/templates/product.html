@@ -1,0 +1,26 @@
+{%extends 'base.html'%}
+{%load static%}
+{%block title%}Product{%endblock%}
+{%block content %}
+    <div class="container py-5">
+        <div class="row mt-5">
+            <div class="col-10 mx-auto col-md-6 my-3">
+                <img src="{%static 'img/ganesh.jpeg'%}" alt="">
+            </div>
+            <div class="col-10 mx-auto col-md-6 my-3">
+                <div>
+                    <h1 class="product_title">Ganesh</h1>
+                    <h5 class="text-info fst-italic mb-4 ">
+                        <span class="me-1">Rs. </span>500
+                    </h5>
+                    <p class="product_description">Product Description</p>
+                    <p class="text-justify product_text">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestias nostrum ut doloribus tempore sapiente impedit a illum soluta adipisci facere enim maxime, error hic quas. Error suscipit, autem maiores modi pariatur assumenda in inventore ab fugiat maxime quam natus odit consectetur quia accusantium deleniti dolore voluptate adipisci eligendi ex non.
+                    </p>
+                    <p class="text-justify product_text">Out of stock</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+{%endblock%}
