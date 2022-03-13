@@ -27,9 +27,11 @@
         {% for product in products%}
         <div class="col-9 mx-auto col-md-6 col-lg-3">
             <div class="card mb-5" >
-                <div class="">
+                <div class="p-0">
+                    <a href="{{product.get_url}}">
                     <img src="{{product.image.url}}" style="object-fit: cover;height: 300px;width:100%;"
                         class="card-image-top" alt="{{product.name}}">
+                </a>
                 </div>
 
                 <div class="card-footer d-flex justify-content-between" style="background: transparent;border: transparent;">
