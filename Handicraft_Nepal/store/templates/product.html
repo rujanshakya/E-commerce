@@ -3,9 +3,9 @@
 {%block title%}Product{%endblock%}
 {%block content %}
     <div class="container py-5">
-        <div class="row mt-5">
+        <div class="row mx-5">
             <div class="col-10 mx-auto col-md-6 my-3">
-                <img src="{{product.image.url}}" height=100% width=100% alt="">
+                <img src="{{product.image.url}}" height=80% width=80% alt="">
             </div>
             <div class="col-10 mx-auto col-md-6 my-3">
                 <div>
@@ -17,10 +17,12 @@
                     <p class="text-justify product_text">
                         {{product.description}}
                     </p>
-                    {% if product.stock <= 0%}
+                    {% if product.stock <=  0%}
                     <p class="text-justify product_text">Out of stock</p>
                     {%else%}
-                    <a href="">Add to Cart</a>
+                    <a href="{%url 'add_cart' product.id%}">
+                        <button type="button" name="button" class="btn btn-secondary">Add to Cart</button>
+                    </a>
                     {%endif%}
                 </div>
 

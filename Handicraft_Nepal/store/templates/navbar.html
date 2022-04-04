@@ -15,6 +15,9 @@
       </li>
         <li class="nav-item"><a class="nav-link" href="">Contact</a></li>
         <li class="nav-item"><a class="nav-link" href="">About</a></li>
+        {%if item_count > 0%}
+        <li class="nav-item"><a class="nav-link" href="{%url 'cart_detail'%}"><i class="fas fa-shopping-cart"></i>({{item_count}})</a></li>
+        {%endif%}
     </ul>
     <form class="form-inline ">
         <div class="input-group">
