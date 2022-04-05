@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'store'
+    'store',
+    'stripe',
+
 ]
 
 MIDDLEWARE = [
@@ -129,3 +131,6 @@ STATICFILES_DIRS=[ os.path.join(BASE_DIR,'static')]
 #Media directory to store uploaded photos
 MEDIA_URL='/media/'
 MEDIA_ROOT=os.path.join(BASE_DIR,'static','media')
+
+STRIPE_PUBLISHABLE_KEY='pk_test_51KXhFiCSThRBLq0jL9GBz5O3Zj4CL1sJKDugOUWEXi3NhPeTfvTv38ILVd8UDdDbuHOlnvByLwDtygrvBygCT0PI005HFAtLqC'
+STRIPE_SECRET_KEY='sk_test_51KXhFiCSThRBLq0j7bJKw8sM4JaZ4PmYQmq6GHaC6nWZnFfKUhrfTiEHH2aukJRVeBhQ9MsmgEKxBQtdwxF9nDsn00DFBdmSgY'

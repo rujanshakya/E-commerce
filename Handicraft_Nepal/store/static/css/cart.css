@@ -12,3 +12,14 @@
     text-decoration: none;
     color:black ;
 }
+.stripe-button-el{
+    width: 100% !important;
+    display: block !important;
+    background-color: black;
+    margin-bottom:5px ;
+
+}
+.stripe-button-el span{
+    height:36px !important ;
+
+}

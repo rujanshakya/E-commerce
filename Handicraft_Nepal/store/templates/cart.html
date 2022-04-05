@@ -90,8 +90,25 @@
             </tr>
         </table>
         <div class="mx-auto">
+            <form class=""  action="" method="POST">
+                {%csrf_token%}
+                <script src="https://checkout.stripe.com/checkout.js"
+                class="stripe-button"
+                data-key="{{data_key}}"
+                data-amount="{{stripe_total}}"
+                data-name="HanidcraftNepal"
+                data-description="{{description}}"
+                data-locale="auto"
+                data-currency="usd"
+                data-shipping-address="true"
+                data-billing-address="true"
+                ></script>
+                </form>
+
+
+            
             <a href="{%url 'home'%}" style="text-decoration: none;">
-                <button type="button" class="btn btn-block btn-lg  bg-dark text-white ">Continue Shopping</button>
+                <button type="button" style="width: 100%;" class="btn btn-block btn-lg  bg-dark text-white ">Continue Shopping</button>
             </a>
         </div>
     </div>
