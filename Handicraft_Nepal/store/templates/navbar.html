@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark ">
 
-    <a href="/" class="navbar-brand text-uppercase fw-bold">Handicraft<span style="color: red;">Nepal</span></a> 
+    <a href="{%url 'home'%}" class="navbar-brand text-uppercase fw-bold">Handicraft<span style="color: red;">Nepal</span></a> 
     <button type="button" name="button" class="navbar-toggler bg-dark" data-bs-toggle="collapse" data-bs-target="#nav"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse justify-content-between mx-3" id="nav" >
     <ul class="navbar-nav text-light text-uppercase" >
@@ -13,8 +13,31 @@
               {%endfor%}
           </div>
       </li>
-        <li class="nav-item"><a class="nav-link" href="">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="{%url 'contact'%}">Contact</a></li>
+        <li class="nav-item"><a class="nav-link" href="{%url 'about'%}">About</a></li>
+        {%if request.user.is_authenticated and request.user.first_name%}
+        <li class="nav-item">
+          <span class="nav-link">
+            Welcome {{request.user.first_name}} <i class="fas fa-user circle"></i>
+          </span>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" href="{%url 'signout'%}">
+           Sign out <i class="fas fa-sign-out-alt"></i>
+          </a>
+          </li>
+          {%else%}
+          <li class="nav-item">
+            <a class="nav-link" href="{%url 'signup'%}">
+            Register <i class="fas fa-user-plus"></i>
+            </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{%url 'signin'%}">
+               Sign in <i class="fas fa-sign-in-alt"></i>
+              </a>
+              </li>
+        {%endif%}
         {%if item_count > 0%}
         <li class="nav-item"><a class="nav-link" href="{%url 'cart_detail'%}"><i class="fas fa-shopping-cart"></i>({{item_count}})</a></li>
         {%endif%}
