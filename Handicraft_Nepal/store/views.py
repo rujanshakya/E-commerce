@@ -1,6 +1,7 @@
 
 from django.shortcuts import get_object_or_404, redirect, render
-from .models import CartItem, Category, Product, Cart, CartItem, Order, OrderItem
+from requests import request
+from .models import  Category, Product, Cart, CartItem, Order, OrderItem
 from django.core.exceptions import ObjectDoesNotExist
 import stripe
 from django.conf import settings
@@ -8,6 +9,7 @@ from django.contrib.auth.models import Group,User
 from .forms import SignUpForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login,authenticate,logout
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 
@@ -177,8 +179,7 @@ def cart_remove_product(request, product_id):
 
 def thanks_page(request):
     # if order_id:
-    #     customer_order=get_object_or_404(Order, id=order_id)
-    
+    #      customer_order=get_object_or_404(Order, id=order_id)
     return render(request,'thankyou.html')
 
 def signupView(request):
@@ -213,3 +214,23 @@ def signinView(request):
 def signoutView(request):
     logout(request)
     return redirect("signin")
+
+@login_required(redirect_field_name='next',login_url='signin')
+def orderHistory(request):
+    if request.user.is_authenticated:
+        email= str(request.user.email)
+        order_details=Order.objects.filter(emailAddress=email)
+        # print(email)
+        # print(order_details)
+        # print(str(request.user.email))
+        # print(Order.objects.get(id=1,emailAddress=email))
+    return render(request,'orders_list.html',{'order_details':order_details})
+
+@login_required(redirect_field_name='next',login_url='signin')   
+def viewOrder(request, order_id):
+    if request.user.is_authenticated:
+        email= str(request.user.email)
+        order=Order.objects.get(id=order_id,emailAddress=email)   
+        order_items=OrderItem.objects.filter(order=order)
+        # print(order_items)
+    return render(request,'order_detail.html',{'order':order,'order_items':order_items})

@@ -22,13 +22,14 @@
             </div>
             <div class="col-12 col-sm-12 col-md-12 col-lg-6 bg-light">
                 <br>
-                <h2 class="product_title">Register Customer Only</h2>
+                <h2 class="product_title">Registerd Customer Only</h2>
+                <div class="my-5">
                 <form method="post">
                     {%csrf_token%}
                     <p>{{form | crispy}}</p>
                     <button type="submit" name="button" class="btn btn-secondary">Login</button>
                 </form>
-
+            </div>
             </div>
         </div>
     </div>

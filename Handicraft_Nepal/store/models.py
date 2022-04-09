@@ -1,16 +1,7 @@
-from cgi import print_exception
-from distutils.command.upload import upload
-import email
-from multiprocessing.dummy import active_children
-from ssl import create_default_context
-from tabnanny import verbose
-from tkinter import CASCADE
-from tkinter.tix import Tree
 from unicodedata import category
 from django.db import models
-from matplotlib.style import available
 from django.urls import reverse
-from sympy import total_degree
+
 
 # Create your models here.
 #Model for product Category
