@@ -1,12 +1,12 @@
-<nav class="navbar navbar-expand-md navbar-dark bg-dark ">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark px-3">
 
     <a href="{%url 'home'%}" class="navbar-brand text-uppercase fw-bold">Handicraft<span style="color: red;">Nepal</span></a> 
     <button type="button" name="button" class="navbar-toggler bg-dark" data-bs-toggle="collapse" data-bs-target="#nav">
       <span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse justify-content-between mx-3" id="nav" >
-    <ul class="navbar-nav text-light text-uppercase" >
-        <li class="nav-item" ><a class="nav-link"  
-          href="" data-bs-toggle="dropdown">Categories</a>
+    <ul class="navbar-nav text-light text-uppercase px-2" >
+        <li class="nav-item" >
+          <a class="nav-link" data-bs-toggle="dropdown">Categories</a>
           <div class="dropdown-menu">
             <a  class="dropdown-item"  href="{%url 'home'%}">All Products</a>
               {% for category in links%}
@@ -46,11 +46,11 @@
         <li class="nav-item"><a class="nav-link" href="{%url 'cart_detail'%}"><i class="fas fa-shopping-cart"></i>({{item_count}})</a></li>
         {%endif%}
     </ul>
-    <form class="form-inline ">
+    <form class="form-inline ml-3 " action="{%url 'search'%}" method="GET">
         <div class="input-group">
-        <input type="text" class="form-control" placeholder="Search">
+        <input type="text" name="title" class="form-control" placeholder="Search">
         <div class="input-group-append">
-            <button type="button" class="btn btn-warning" name="button"><i class="fa fa-search"></i></button>
+            <button type="submit" class="btn btn-warning" name="button"><i class="fa fa-search"></i></button>
         </div>
       </div>
     </form>
