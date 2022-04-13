@@ -1,15 +1,16 @@
 
 from django.shortcuts import get_object_or_404, redirect, render
-from requests import request
-from .models import  Category, Product, Cart, CartItem, Order, OrderItem
+from .models import Category, Product, Cart, CartItem, Order, OrderItem
 from django.core.exceptions import ObjectDoesNotExist
 import stripe
 from django.conf import settings
-from django.contrib.auth.models import Group,User
-from .forms import SignUpForm
+from django.contrib.auth.models import Group, User
+from .forms import SignUpForm,ContactForm
 from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import login,authenticate,logout
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
+from django.template.loader import get_template
+from django.core.mail import EmailMessage
 # Create your views here.
 
 
@@ -24,11 +25,14 @@ def home(request, category_slug=None):
         products = Product.objects.all().filter(available=True)
     return render(request, "home.html", {'category': category_page, 'products': products})
 
+
 def about(request):
-    return render(request,'about.html')
-    
+    return render(request, 'about.html')
+
+
 def contact(request):
-    return render(request,'contact.html')
+    return render(request, 'contact.html')
+
 
 def productPage(request, category_slug, product_slug):
     try:
@@ -129,7 +133,7 @@ def cart_detail(request, total=0, counter=0, cart_items=None):
                     shippingCity=shippingCity,
                     shippingPostcode=shippingPostcode,
                     shippingCountry=shippingCountry
-                                )
+                )
                 order_details.save()
                 for order_item in cart_items:
                     or_item = OrderItem.objects.create(
@@ -142,12 +146,19 @@ def cart_detail(request, total=0, counter=0, cart_items=None):
 
                 # reduce stock
                 products = Product.objects.get(id=order_item.product_id)
-                products.stock = int(order_item.product.stock-order_item.quantity)
+                products.stock = int(
+                    order_item.product.stock-order_item.quantity)
                 products.save()
                 order_item.delete()
 
                 # print a message when the order is created
                 print('the order has been created')
+                try:
+                    sendEmail(order_details.id)
+                    print("The order email has been sent orderid : ",order_details.id)
+                except IOError as e:
+                    return e
+
                 return redirect('thanks_page')
 
             except ObjectDoesNotExist:
@@ -156,12 +167,13 @@ def cart_detail(request, total=0, counter=0, cart_items=None):
         except stripe.error.CardError as e:
             return False, e
 
-    return render(request, 'cart.html',dict(cart_items=cart_items,total=total,counter=counter,data_key=data_key,stripe_total=stripe_total,description=description))
+    return render(request, 'cart.html', dict(cart_items=cart_items, total=total, counter=counter, data_key=data_key, stripe_total=stripe_total, description=description))
+
 
 def cart_remove(request, product_id):
     cart = Cart.objects.get(cart_id=_cart_id(request))
-    product = get_object_or_404(Product,id=product_id)
-    cart_item = CartItem.objects.get(product=product,cart=cart)
+    product = get_object_or_404(Product, id=product_id)
+    cart_item = CartItem.objects.get(product=product, cart=cart)
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
         cart_item.save()
@@ -170,71 +182,118 @@ def cart_remove(request, product_id):
 
     return redirect('cart_detail')
 
+
 def cart_remove_product(request, product_id):
     cart = Cart.objects.get(cart_id=_cart_id(request))
-    product = get_object_or_404(Product,id=product_id)
-    cart_item = CartItem.objects.get(product=product,cart=cart)
+    product = get_object_or_404(Product, id=product_id)
+    cart_item = CartItem.objects.get(product=product, cart=cart)
     cart_item.delete()
     return redirect('cart_detail')
+
 
 def thanks_page(request):
     # if order_id:
     #      customer_order=get_object_or_404(Order, id=order_id)
-    return render(request,'thankyou.html')
+    return render(request, 'thankyou.html')
+
 
 def signupView(request):
-    if request.method=='POST':
+    if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            username=form.cleaned_data.get('username')
-            signup_user=User.objects.get(username=username)
-            customer_group =Group.objects.get(name='Customer')
+            username = form.cleaned_data.get('username')
+            signup_user = User.objects.get(username=username)
+            customer_group = Group.objects.get(name='Customer')
             customer_group.user_set.add(signup_user)
     else:
-        form=SignUpForm()
-    return render(request,'signup.html',{'form':form})
+        form = SignUpForm()
+    return render(request, 'signup.html', {'form': form})
+
 
 def signinView(request):
-    if request.method=="POST":
-        form=AuthenticationForm(data=request.POST)
+    if request.method == "POST":
+        form = AuthenticationForm(data=request.POST)
         if form.is_valid():
-            username=request.POST['username']
-            password=request.POST['password']
-            user=authenticate(username=username,password=password)
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
             if user is not None:
-                login(request,user)
+                login(request, user)
                 return redirect('home')
             else:
                 return redirect('signup')
     else:
-        form=AuthenticationForm()
-    return render(request,'signin.html',{'form':form})
+        form = AuthenticationForm()
+    return render(request, 'signin.html', {'form': form})
+
 
 def signoutView(request):
     logout(request)
     return redirect("signin")
 
-@login_required(redirect_field_name='next',login_url='signin')
+
+@login_required(redirect_field_name='next', login_url='signin')
 def orderHistory(request):
     if request.user.is_authenticated:
-        email= str(request.user.email)
-        order_details=Order.objects.filter(emailAddress=email)
+        email = str(request.user.email)
+        order_details = Order.objects.filter(emailAddress=email)
         # print(email)
         # print(order_details)
         # print(str(request.user.email))
         # print(Order.objects.get(id=1,emailAddress=email))
-    return render(request,'orders_list.html',{'order_details':order_details})
+    return render(request, 'orders_list.html', {'order_details': order_details})
 
-@login_required(redirect_field_name='next',login_url='signin')   
+
+@login_required(redirect_field_name='next', login_url='signin')
 def viewOrder(request, order_id):
     if request.user.is_authenticated:
-        email= str(request.user.email)
-        order=Order.objects.get(id=order_id,emailAddress=email)   
-        order_items=OrderItem.objects.filter(order=order)
+        email = str(request.user.email)
+        order = Order.objects.get(id=order_id, emailAddress=email)
+        order_items = OrderItem.objects.filter(order=order)
         # print(order_items)
-    return render(request,'order_detail.html',{'order':order,'order_items':order_items})
+    return render(request, 'order_detail.html', {'order': order, 'order_items': order_items})
+
 
 def search(request):
-    products=Product.objects.filter(name__contains=request.GET['title'])
-    return render(request,'home.html',{'products':products})
+    products = Product.objects.filter(name__contains=request.GET['title'])
+    return render(request, 'home.html', {'products': products})
+
+
+def sendEmail(order_id):
+    transaction = Order.objects.get(id=order_id)
+    order_items = OrderItem.objects.filter(order=transaction)
+
+    try:
+        subject = "Handicraft Nepal- New Order #{}".format(transaction.id)
+        to = ['{}'.format(transaction.emailAddress)]
+        from_email = 'handicraftnepal12@gmail.com'
+        order_information = {
+            'transaction': transaction,
+            'order_items': order_items
+        }
+        message = get_template('email/email.html').render(order_information)
+        msg = EmailMessage(subject, message, to=to, from_email=from_email)
+        msg.content_subtype='html'
+        msg.send()
+
+    except IOError as e:
+        return e
+
+def contact(request):
+    if request.method=="POST":
+        form=ContactForm(request.POST)
+        if form.is_valid():
+            Subject=form.cleaned_data.get('Subject')
+            Email=form.cleaned_data.get('Email')
+            Message=form.cleaned_data.get('Message')
+            Name=form.cleaned_data.get('Name')
+
+            message_format="{0} has sent you a new message:\n\n{1} \n\n Email from:{2}".format(Name,Message,Email)
+            msg = EmailMessage(Subject, message_format, to=['handicraftnepal12@gmail.com'], from_email=Email)
+            msg.send()
+            return render(request,'contact_success.html')
+    else:
+        form=ContactForm()
+
+    return render(request,'contact.html',{'form':form})

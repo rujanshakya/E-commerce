@@ -137,3 +137,16 @@ STRIPE_PUBLISHABLE_KEY='pk_test_51KXhFiCSThRBLq0jL9GBz5O3Zj4CL1sJKDugOUWEXi3NhPe
 STRIPE_SECRET_KEY='sk_test_51KXhFiCSThRBLq0j7bJKw8sM4JaZ4PmYQmq6GHaC6nWZnFfKUhrfTiEHH2aukJRVeBhQ9MsmgEKxBQtdwxF9nDsn00DFBdmSgY'
 
 CRISPY_TEMPLATE_PACK='bootstrap4'
+
+# EMAIL_HOST = 'smtp.mailgun.org'
+# EMAIL_PORT= 587
+# EMAIL_USE_TLS= True
+# EMAIL_HOST_USER = 'postmaster@sandboxc94cbf7620544786bc3f212dc272de21.mailgun.org'
+# EMAIL_HOST_PASSWORD = '81b072414bddf9caeaa1e42e94ab43b9-162d1f80-beb4499a'
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST_USER="handicraftnepal12@gmail.com"
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_PASSWORD="test123@"

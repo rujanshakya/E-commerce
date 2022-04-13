@@ -45,11 +45,11 @@
                     <br>
                     SKU:{{cart_item.product.id}}
                     <br>
-                    Unit Price: {{cart_item.product.price}}
+                    Unit Price: <b>{{cart_item.product.price}}</b>
                     <br>
-                    Qty:{{cart_item.quantity}} X Rs{{cart_item.product.price}}
+                    Qty:<b>{{cart_item.quantity}} X ${{cart_item.product.price}}</b>
                 </td>
-                <td> Rs. {{cart_item.sub_total}}</td>
+                <td> Rs. <b>{{cart_item.sub_total}}</b></td>
                 {%if cart_item.quantity < cart_item.product.stock %}
 
                 <td>

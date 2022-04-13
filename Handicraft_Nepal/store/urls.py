@@ -18,7 +18,6 @@ urlpatterns = [
     path('order_history/',views.orderHistory,name='order_history'),
     path('order/<int:order_id>',views.viewOrder,name='order_detail'),
     path('search/',views.search,name='search'),
-    path('<slug:category_slug>/<slug:product_slug>',views.productPage,name='product_detail'),
-
-
+    path('contact/',views.contact,name='contact'),
+    path('<slug:category_slug>/<slug:product_slug>',views.productPage,name='product_detail'),  
 ]
