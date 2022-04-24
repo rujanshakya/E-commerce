@@ -38,18 +38,18 @@
             {%for cart_item in cart_items%}
             <tr>
                 <td>
-                    <a href="cart_item.product.get_url"><img src="{{cart_item.product.image.url}}" height="100" width="100"></a>
+                    <a href="{{cart_item.product.image.url}}"><img src="{{cart_item.product.image.url}}" height="100" width="100"></a>
                 </td>
                 <td class="text-left">
-                    {{cart_item.product.name}}
+                    Product Name: <b>{{cart_item.product.name}}</b>
                     <br>
                     SKU:{{cart_item.product.id}}
                     <br>
-                    Unit Price: <b>{{cart_item.product.price}}</b>
+                    Unit Price: <b>$ {{cart_item.product.price}}</b>
                     <br>
-                    Qty:<b>{{cart_item.quantity}} X ${{cart_item.product.price}}</b>
+                    Qty: <b>{{cart_item.quantity}} X ${{cart_item.product.price}}</b>
                 </td>
-                <td> Rs. <b>{{cart_item.sub_total}}</b></td>
+                <td> $  <b>{{cart_item.sub_total}}</b></td>
                 {%if cart_item.quantity < cart_item.product.stock %}
 
                 <td>
@@ -85,7 +85,7 @@
             </tr>
             <tr>
                 <td class="text-left">
-                    Your total is: <strong>{{total}}</strong>
+                    Your total is: <strong>$ {{total}}</strong>
                 </td>
             </tr>
         </table>
@@ -113,5 +113,11 @@
         </div>
     </div>
 </div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 {%endif%}
 {%endblock%}

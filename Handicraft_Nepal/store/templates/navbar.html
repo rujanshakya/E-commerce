@@ -4,18 +4,19 @@
     <button type="button" name="button" class="navbar-toggler bg-dark" data-bs-toggle="collapse" data-bs-target="#nav">
       <span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse justify-content-between mx-3" id="nav" >
-    <ul class="navbar-nav text-light text-uppercase px-2" >
-        <li class="nav-item" >
+    <ul class="navbar-nav text-light text-uppercase " >
+        <li class="nav-item mx-3" >
           <a class="nav-link" data-bs-toggle="dropdown">Categories</a>
-          <div class="dropdown-menu">
-            <a  class="dropdown-item"  href="{%url 'home'%}">All Products</a>
+          <div class="dropdown-menu"  >
+            <a  class="dropdown-item"  href="{%url 'home'%}" >All Products</a>
               {% for category in links%}
-              <a  class="dropdown-item"  href="{{category.get_url}}">{{category.name}}</a>
+              <a  class="dropdown-item"  href="{{category.get_url}}" >{{category.name}}</a>
               {%endfor%}
           </div>
       </li>
         <li class="nav-item"><a class="nav-link" href="{%url 'contact'%}">Contact</a></li>
         <li class="nav-item"><a class="nav-link" href="{%url 'about'%}">About</a></li>
+
         {%if request.user.is_authenticated and request.user.first_name%}
         <li class="nav-item dropdown" style="cursor:pointer">
           <a class="nav-link" data-bs-toggle="dropdown">
